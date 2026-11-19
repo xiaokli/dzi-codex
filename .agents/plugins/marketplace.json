@@ -1,0 +1,15 @@
+{
+  "name": "dzine-codex-market",
+  "interface": {
+    "displayName": "Dzine Codex Market"
+  },
+  "plugins": [
+    {
+      "name": "dzine-pipeline-beta",
+      "source": {
+        "source": "local",
+        "path": "./plugins/dzine-pipeline-beta"
+      }
+    }
+  ]
+}
