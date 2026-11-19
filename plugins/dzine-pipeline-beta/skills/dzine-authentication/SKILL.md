@@ -8,7 +8,7 @@ description: Connect Dzine Pipeline during plugin setup, or recover when its MCP
 Use the host's connection/authentication action for this plugin when credentials are missing, HTTP 401 is returned, or a Dzine tool explicitly reports an invalid, expired, revoked, or rejected token. Suspend dependent Dzine calls until authorization completes.
 
 1. Start the host-provided MCP authorization flow for Dzine Pipeline. For a separately configured CLI MCP entry, use `codex mcp login <registered-server-name>` with its actual registered name.
-2. Let the host open the authorization URL. The local React consent page is `/mcp-authentication?type=codex` on `http://localhost:5171` (under the configured web base path when applicable). Preserve the authorization request parameters provided by the service. Ask the user to sign into Dzine and select Allow.
+2. Let the host open the authorization URL. The Codex consent page is [Dzine MCP authentication](http://beta.stylardesign.com/mcp-authentication?type=codex). Preserve the authorization request parameters provided by the service. Ask the user to sign into Dzine and select Allow.
 3. Let the authorization service complete the host-provided callback and token exchange. Keep tokens out of chat messages, prompts, plugin files, and custom deep-link query parameters.
 4. After the host confirms connection, verify access with `list_projects`. Resume the user's original task when this succeeds.
 
