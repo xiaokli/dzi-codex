@@ -7,6 +7,6 @@
   "onboardingSkill": "./skills/dzine-authentication/SKILL.md",
   "interface": {
     "displayName": "Dzine Pipeline Beta",
-    "shortDescription": "Work with Dzine projects and canvases."
+    "shortDescription": "Work with Dzine projects and canvases. Requires local token setup after installation."
   }
 }

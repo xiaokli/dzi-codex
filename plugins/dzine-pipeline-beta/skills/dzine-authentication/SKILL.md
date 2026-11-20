@@ -7,15 +7,29 @@ description: Connect Dzine Pipeline during plugin setup, or recover when its MCP
 
 When credentials are missing, HTTP 401 is returned, or a Dzine tool explicitly reports an invalid, expired, revoked, or rejected token, use the manual setup below until the service supports OAuth. Suspend dependent Dzine calls until access is verified.
 
-## Manual setup
+## Post-install setup
 
-In the local copy of the plugin's `.mcp.json`, replace `<DZINE_MCP_TOKEN>` in `mcpServers.dzine-pipeline-beta.http_headers.Authorization` with a valid Dzine token and keep the `Bearer ` prefix. Reload the plugin in Codex and verify access with `list_projects`. Keep the real token out of chat, source control, and distributed plugin packages.
+During plugin onboarding, guide the user through these steps before calling Dzine tools. Use the same steps to replace an expired or rejected token.
+
+1. Open the user-level Codex config at `~/.codex/config.toml`. Add the following settings, updating existing tables in place if present. The first table disables the connection bundled with the plugin. The second registers a personal connection with a configurable Authorization header.
+
+   ```toml
+   [plugins."dzine-pipeline-beta@dzine-codex-market".mcp_servers.dzine-pipeline-beta]
+   enabled = false
+
+   [mcp_servers.dzine-pipeline-beta]
+   url = "http://52.81.236.158:8087/ext/mcp"
+   http_headers = { Authorization = "Bearer <DZINE_MCP_TOKEN>" }
+   ```
+
+2. Replace `<DZINE_MCP_TOKEN>` directly in the local config with a valid Dzine token and keep the `Bearer ` prefix. Keep the real token out of chat, source control, and distributed plugin packages.
+3. Restart Codex and confirm `dzine-pipeline-beta` appears under **Servers** in MCP settings. Verify access with `list_projects`.
 
 ## OAuth recovery
 
 Use this flow once the service supports OAuth.
 
-1. Start the host-provided MCP authorization flow for Dzine Pipeline. For a separately configured CLI MCP entry, use `codex mcp login <registered-server-name>` with its actual registered name.
+1. Start the host-provided MCP authorization flow for Dzine Pipeline. For a separately configured CLI MCP entry, use `codex mcp login dzine-pipeline-beta`.
 2. Let the host open the authorization URL. The Codex consent page is [Dzine MCP authentication](http://beta.stylardesign.com/mcp-authentication?type=codex). Preserve the authorization request parameters provided by the service. Ask the user to sign into Dzine and select Allow.
 3. Let the authorization service complete the host-provided callback and token exchange. Keep tokens out of chat messages, prompts, plugin files, and custom deep-link query parameters.
 4. After the host confirms connection, verify access with `list_projects`. Resume the user's original task when this succeeds.
