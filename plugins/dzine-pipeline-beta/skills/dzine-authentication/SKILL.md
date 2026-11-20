@@ -5,7 +5,15 @@ description: Connect Dzine Pipeline during plugin setup, or recover when its MCP
 
 # Dzine Pipeline authentication
 
-Use the host's connection/authentication action for this plugin when credentials are missing, HTTP 401 is returned, or a Dzine tool explicitly reports an invalid, expired, revoked, or rejected token. Suspend dependent Dzine calls until authorization completes.
+When credentials are missing, HTTP 401 is returned, or a Dzine tool explicitly reports an invalid, expired, revoked, or rejected token, use the manual setup below until the service supports OAuth. Suspend dependent Dzine calls until access is verified.
+
+## Manual setup
+
+In the local copy of the plugin's `.mcp.json`, replace `<DZINE_MCP_TOKEN>` in `mcpServers.dzine-pipeline-beta.http_headers.Authorization` with a valid Dzine token and keep the `Bearer ` prefix. Reload the plugin in Codex and verify access with `list_projects`. Keep the real token out of chat, source control, and distributed plugin packages.
+
+## OAuth recovery
+
+Use this flow once the service supports OAuth.
 
 1. Start the host-provided MCP authorization flow for Dzine Pipeline. For a separately configured CLI MCP entry, use `codex mcp login <registered-server-name>` with its actual registered name.
 2. Let the host open the authorization URL. The Codex consent page is [Dzine MCP authentication](http://beta.stylardesign.com/mcp-authentication?type=codex). Preserve the authorization request parameters provided by the service. Ask the user to sign into Dzine and select Allow.
@@ -20,4 +28,4 @@ If authorization is cancelled, fails again, or the service lacks OAuth discovery
 
 ## Current implementation boundary
 
-The plugin currently uses `DZINE_MCP_TOKEN` via `bearer_token_env_var`. The React consent page is implemented, but its Allow action and the MCP OAuth endpoints are pending. Until they are connected, explain that browser authorization is unavailable and the current manual setup requires launching Codex with a valid `DZINE_MCP_TOKEN` in its environment. These instructions define the recovery workflow; the MCP service must implement the authentication challenge and OAuth endpoints for the host to initiate it automatically.
+The React consent page is implemented. Browser authorization requires the Allow action and the MCP OAuth endpoints to be connected.

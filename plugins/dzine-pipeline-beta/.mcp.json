@@ -3,7 +3,9 @@
     "dzine-pipeline-beta": {
       "type": "http",
       "url": "http://52.81.236.158:8087/ext/mcp",
-      "bearer_token_env_var": "DZINE_MCP_TOKEN"
+      "http_headers": {
+        "Authorization": "Bearer <DZINE_MCP_TOKEN>"
+      }
     }
   }
 }
