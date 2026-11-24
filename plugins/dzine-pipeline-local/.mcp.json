@@ -2,10 +2,7 @@
   "mcpServers": {
     "dzine-pipeline-local": {
       "type": "http",
-      "url": "http://127.0.0.1:4310/mcp",
-      "http_headers": {
-        "Authorization": "Bearer <DZINE_MCP_TOKEN>"
-      }
+      "url": "http://127.0.0.1:4310/mcp"
     }
   }
 }

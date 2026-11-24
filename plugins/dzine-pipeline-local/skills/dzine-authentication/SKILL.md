@@ -5,41 +5,18 @@ description: Connect Dzine Pipeline Local during plugin setup, or recover when i
 
 # Dzine Pipeline Local authentication
 
-When credentials are missing, HTTP 401 is returned, or a Dzine tool explicitly reports an invalid, expired, revoked, or rejected token, use the manual setup below until the service supports OAuth. Suspend dependent Dzine calls until access is verified.
+## Connect or recover
 
-## Post-install setup
+Use the host's connection/authentication action for this plugin when credentials are missing, HTTP 401 is returned, or a Dzine tool explicitly reports an invalid, expired, revoked, or rejected token. Suspend dependent Dzine calls until authorization completes.
 
-During plugin onboarding, guide the user through these steps before calling Dzine tools. Use the same steps to replace an expired or rejected token.
-
-1. Open the user-level Codex config at `~/.codex/config.toml`. Add the following settings, updating existing tables in place if present. The first table disables the connection bundled with the plugin. The second registers a personal connection with a configurable Authorization header.
-
-   ```toml
-   [plugins."dzine-pipeline-local@dzine-codex-market".mcp_servers.dzine-pipeline-local]
-   enabled = false
-
-   [mcp_servers.dzine-pipeline-local]
-   url = "http://127.0.0.1:4310/mcp"
-   http_headers = { Authorization = "Bearer <DZINE_MCP_TOKEN>" }
-   ```
-
-2. Replace `<DZINE_MCP_TOKEN>` directly in the local config with a valid Dzine token and keep the `Bearer ` prefix. Keep the real token out of chat, source control, and distributed plugin packages.
-3. Restart Codex and confirm `dzine-pipeline-local` appears under **Servers** in MCP settings. Verify access with `list_projects`.
-
-## OAuth recovery
-
-Use this flow once the service supports OAuth.
-
-1. Start the host-provided MCP authorization flow for Dzine Pipeline Local. For a separately configured CLI MCP entry, use `codex mcp login dzine-pipeline-local`.
-2. Let the host open the authorization URL. The Codex consent page is [Dzine MCP authentication](http://localhost:5171/mcp-authentication?type=codex). Preserve the authorization request parameters provided by the service. Ask the user to sign into Dzine and select Allow.
-3. Let the authorization service complete the host-provided callback and token exchange. Keep tokens out of chat messages, prompts, plugin files, and custom deep-link query parameters.
-4. After the host confirms connection, verify access with `list_projects`. Resume the user's original task when this succeeds.
+1. If an existing authorization has expired, been revoked, or been rejected, use Codex's disconnect or sign-out action for Dzine Pipeline Local to clear all locally stored OAuth credentials for that connection. Keep the browser's Dzine sign-in session and other connections intact. If Codex requires the user to take this action, guide them to the connection settings. A first-time connection can proceed directly to authorization.
+2. Open the Dzine Pipeline Local connection in Codex and start a fresh authorization.
+3. Let the host open the authorization URL and follow the service's redirect to the Dzine consent page. Ask the user to sign into Dzine and select Allow.
+4. Let the authorization service complete the host-provided callback and token exchange. Keep tokens out of chat messages, prompts, plugin files, and custom deep-link query parameters.
+5. After the host confirms connection, verify access with `list_projects`. Resume the user's original task when this succeeds.
 
 Treat HTTP 403 or project/canvas membership denial as a resource permission failure unless the service explicitly identifies invalid credentials. Explain which access is missing.
 
 After reconnecting, retry failed reads once. For writes, asset creation, or generation with an uncertain submission outcome, reconcile using the original operation ID and `get_operation` before resubmitting. Preserve the original operation ID. If reconciliation is unavailable, report the uncertain outcome and stop automatic resubmission.
 
-If authorization is cancelled, fails again, or the service lacks OAuth discovery/token exchange, report the blocker and stop the recovery loop. Opening the consent page alone does not establish an authenticated connection.
-
-## Current implementation boundary
-
-The React consent page is implemented. Browser authorization requires the Allow action and the MCP OAuth endpoints to be connected.
+If Codex cannot reach Dzine Pipeline Local, tell the user the local connection is unavailable and ask them to contact their Dzine support contact. If the user cancels or authorization fails again, explain what happened and stop retrying.
