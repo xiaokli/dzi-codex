@@ -7,6 +7,9 @@
   "onboardingSkill": "./skills/dzine-authentication/SKILL.md",
   "interface": {
     "displayName": "Dzine Pipeline Local",
-    "shortDescription": "Connect to Dzine Pipeline on this device."
+    "shortDescription": "Connect to Dzine Pipeline on this device.",
+    "defaultPrompt": [
+      "Use Dzine Pipeline Local to list my current projects and help me find a canvas."
+    ]
   }
 }
