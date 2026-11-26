@@ -1,12 +1,15 @@
 {
   "name": "dzine-pipeline-beta",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Use Dzine projects, canvases, assets, and generation tools.",
   "mcpServers": "./.mcp.json",
   "skills": "./skills/",
   "onboardingSkill": "./skills/dzine-authentication/SKILL.md",
   "interface": {
     "displayName": "Dzine Pipeline Beta",
-    "shortDescription": "Work with Dzine projects and canvases. Requires local token setup after installation."
+    "shortDescription": "Work with Dzine projects and canvases. Requires local token setup after installation.",
+    "defaultPrompt": [
+      "Use Dzine Pipeline Beta to list my current projects and help me find a canvas."
+    ]
   }
 }
